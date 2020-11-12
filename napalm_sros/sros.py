@@ -68,6 +68,7 @@ class NokiaSROSDriver(NetworkDriver):
 
         if optional_args is None:
             optional_args = {}
+        self.cli_delay = optional_args.get("cli_delay", 0.250)
         self.port = optional_args.get("port", 830)
         self.conn_ssh = optional_args.get("ssh_conn", None)
         self.ssh_channel = optional_args.get("ssh_channel", None)
@@ -130,7 +131,7 @@ class NokiaSROSDriver(NetworkDriver):
                 c = c + "\n"
             self.ssh_channel.send(c)
             while True:
-                time.sleep(0.250)
+                time.sleep(self.cli_delay)
                 resp = self.ssh_channel.recv(9999)
                 buff += resp.decode("ascii")
                 if buff.endswith("# "):
